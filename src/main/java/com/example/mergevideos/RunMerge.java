@@ -7,7 +7,7 @@ import java.util.List;
 
 public class RunMerge {
     public static void main(String[] args) {
-        File originalFolder = new File("D:\\BaiduNetdiskDownload\\adr\\2021.03.06");
+        File originalFolder = new File("D:\\BaiduNetdiskDownload\\adr\\2021.07.01");
         List<File> fileList = Arrays.asList(originalFolder.listFiles());
 
         List<File> mergeFiles = new ArrayList<>();
@@ -19,7 +19,7 @@ public class RunMerge {
             boolean isEquals5mins = VideoUtil.isTimeLengthEquals(file, 5 * 60);
             if (!isEquals5mins) {
                 File target = new File(mergeFiles.get(0).getParent()
-                        + "/target/" + mergeFiles.get(0).getName());
+                        + "/merge/" + mergeFiles.get(0).getName());
                 VideoUtil.mergeVideos(mergeFiles, target);
                 mergeFiles.clear();
             }
