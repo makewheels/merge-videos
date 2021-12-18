@@ -1,20 +1,28 @@
 package com.example.mergevideos;
 
-import net.bramp.ffmpeg.FFprobe;
-import net.bramp.ffmpeg.probe.FFmpegFormat;
-import net.bramp.ffmpeg.probe.FFmpegProbeResult;
-
 import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class RunMerge {
-    public static void main(String[] args) throws IOException {
-        File originalFolder = new File("D:\\BaiduNetdiskDownload\\行车记录仪\\2021.03.06");
-        FFprobe ffprobe = new FFprobe("C:\\mysofts\\ffprobe.exe");
-        FFmpegProbeResult probeResult = ffprobe.probe(
-                "D:\\BaiduNetdiskDownload\\FILE201214-100956-000493F.MOV");
-        FFmpegFormat format = probeResult.getFormat();
-        double duration = format.duration;
-        System.out.println(duration);
+    public static void main(String[] args) {
+        File originalFolder = new File("D:\\BaiduNetdiskDownload\\adr\\2021.03.06");
+        List<File> fileList = Arrays.asList(originalFolder.listFiles());
+
+        List<File> mergeFiles = new ArrayList<>();
+        for (File file : fileList) {
+            if (file.isDirectory()) {
+                continue;
+            }
+            mergeFiles.add(file);
+            boolean isEquals5mins = VideoUtil.isTimeLengthEquals(file, 5 * 60);
+            if (!isEquals5mins) {
+                File target = new File(mergeFiles.get(0).getParent()
+                        + "/target/" + mergeFiles.get(0).getName());
+                VideoUtil.mergeVideos(mergeFiles, target);
+                mergeFiles.clear();
+            }
+        }
     }
 }
